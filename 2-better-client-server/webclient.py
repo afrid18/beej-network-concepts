@@ -30,10 +30,8 @@ if __name__ == "__main__":
 
         s.close()
 
-
         response_decoded = res.decode('utf-8', 'ignore')
 
         headers, _, body = response_decoded.partition('\r\n\r\n')
 
         print(headers, body, sep="\n")
-

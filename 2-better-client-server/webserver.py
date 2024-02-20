@@ -15,7 +15,6 @@ if __name__ == "__main__":
 
     print(f"Listening on {port}")
 
-
     while True:
         client_socket, addr = s.accept()
         print(f"Connection from {addr}")
@@ -38,19 +37,22 @@ if __name__ == "__main__":
 
         print("User is requesting", file)
 
-        # Send the response with the file if the file is present, else send 404 with file not found
+        # Send the response with the file if the file is present,
+        # else send 404 with file not found
 
         try:
             with open(file, 'rb') as f:
-                http_response = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" + f.read().decode()
+                http_response = "HTTP/1.1 200 OK\r\nContent-Type: text/html\
+                    \r\n\r\n" + f.read().decode()
                 client_socket.sendall(http_response.encode('utf-8'))
                 client_socket.close()
         except FileNotFoundError:
-            http_response = "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\n\r\nFile Not Found"
+            http_response = "HTTP/1.1 404 Not Found\r\nContent-Type: \
+            text/plain\r\n\r\nFile Not Found"
             client_socket.sendall(http_response.encode('utf-8'))
             client_socket.close()
 
-
-        http_response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nsimple server response"
+        http_response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n\
+        simple server response"
         client_socket.sendall(http_response.encode('utf-8'))
         client_socket.close()
