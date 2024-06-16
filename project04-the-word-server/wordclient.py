@@ -26,17 +26,16 @@ def get_next_word_packet(s):
     global packet_buffer
 
     # TODO -- Write me!
-    word_size = int.from_bytes(s.recv(2))
+    while True:
+        if len(packet_buffer) >= int.from_bytes(packet_buffer[:2]) + 2:
+            word_packet = packet_buffer[:2 + int.from_bytes(packet_buffer[:2])]
+            packet_buffer = packet_buffer[2 + int.from_bytes(
+                packet_buffer[:2]):]
+            return word_packet
 
-    if word_size == 0:
-        return None
-
-    packet_buffer = s.recv(word_size)
-
-    if not packet_buffer:
-        return None
-    return packet_buffer
-
+        packet_buffer += s.recv(1)
+        if len(packet_buffer) == 0:
+            return None
 
 
 def extract_word(word_packet):
@@ -50,7 +49,8 @@ def extract_word(word_packet):
     """
 
     # TODO -- Write me!
-    return word_packet.decode('utf-8')
+    # return word_packet.decode('utf-8') # this line works fine too
+    return word_packet[2:].decode('utf-8')
 
 
 # Do not modify:
@@ -77,7 +77,7 @@ def main(argv):
 
         word = extract_word(word_packet)
 
-        print(f" {word}")
+        print(f"{word}")
 
     s.close()
 
